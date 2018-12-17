@@ -5,6 +5,8 @@ f <- function(x){
 }
 integrate(f, lower = 25, upper = 50)
 ```
+
+
 ### 1.2
 ```{r}
 integrate(f, lower = qlnorm(0.1, mean = 3, sd = 0.5), upper = qlnorm(0.9, mean = 3, sd = 0.5))
