@@ -1,0 +1,37 @@
+---
+title: "homework 2"
+author: "Anna Sorokina"
+editor_options: 
+  chunk_output_type: console
+---
+
+### 2.1
+```{r}
+phoi <- read.csv("https://raw.githubusercontent.com/agricolamz/2019_data_analysis_for_linguists/master/data/students/ansorox/hw2_Bayesian_inference/hw2_phoible.csv")
+phoi$cons_ratio <- phoi$consonant/phoi$phonemes 
+most_cons_lang <- phoi[phoi$cons_ratio == max(phoi$cons_ratio),]
+most_cons_lang$language
+```
+
+
+### 2.2
+
+```{r}
+a <- 9.300246
+b <- 4.4545
+phoi$prior_p <- dbeta(phoi$cons_ratio, shape1 = a, shape2 = b)
+
+# p(H|E) = p(E|Hi)*p(Hi)/p(E)
+# p(E|Hi) = 1 
+# p(Hi) - phoi$prior_p
+# p(E) = SUM(p(E|Hi)*p(Hi)) = sum(1*phoi$prior_p) = sum(phoi$prior_p)
+# p(H|E) = phoi$prior_p/sum(phoi$prior_p)
+phoi$posterior_p <- phoi$prior_p/sum(phoi$prior_p)
+
+phoi$p_subtraction_abs <- abs(phoi$posterior_p - phoi$prior_p)
+top_six <- phoi[order(-phoi$p_subtraction_abs),][1:6,]
+top_six$language
+
+```
+
+
