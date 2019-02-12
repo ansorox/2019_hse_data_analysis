@@ -1,12 +1,14 @@
 ---
 title: "hw4"
 author: "Anna Sorokina"
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
 ### 4.1
 ```{r}
+library("tidyverse")
+
 caretta <- read.csv("https://raw.githubusercontent.com/agricolamz/2019_data_analysis_for_linguists/master/data/students/ansorox/hw4_Advanced_Bayesian/hw4_caretta.csv")
 
 # зададим параметры нормального априорного распределения
@@ -35,7 +37,7 @@ by_speaker <- by_speaker %>%
 
 # среднее и стандартное отклонение апостериорного распределения brs02
 postval <- c("mean_post", "sd_post")
-print(subset(by_speaker, speaker == "brs02", select = postval))
+print(data.frame(subset(by_speaker, speaker == "brs02", select = postval)))
 ```
 
 ### 4.2
