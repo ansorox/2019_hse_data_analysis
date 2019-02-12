@@ -1,0 +1,49 @@
+---
+title: "hw4"
+author: "Anna Sorokina"
+editor_options: 
+  chunk_output_type: console
+---
+
+### 4.1
+```{r}
+caretta <- read.csv("https://raw.githubusercontent.com/agricolamz/2019_data_analysis_for_linguists/master/data/students/ansorox/hw4_Advanced_Bayesian/hw4_caretta.csv")
+
+# зададим параметры нормального априорного распределения
+sd_prior <- sd(caretta$vowel.dur)
+mean_prior <- mean(caretta$vowel.dur, trim = 0.1)
+
+# исходя из наблюдаемых данных, найдем значение параметров для каждого спикера
+by_speaker <- summarise(group_by(caretta, speaker), m = mean(vowel.dur), sd = sd(vowel.dur)) 
+sd_data <- by_speaker$sd
+mean_data <- by_speaker$m
+
+# произведем байесовский апдейт для каждого спикера
+sd_post <- (1/sd_prior+1/sd_data)^(-1)
+mean_post <- c()
+for (x in c(1:length(by_speaker$speaker)))
+  {
+  mean_post <- c(mean_post, weighted.mean(c(mean_prior, mean_data[x]), c(1/sd_prior, 1/sd_data[x])))
+  }
+
+# добавим данные в таблицу
+by_speaker <- by_speaker %>% 
+  mutate(
+    mean_post = mean_post, 
+    sd_post = sd_post
+  )
+
+# среднее и стандартное отклонение апостериорного распределения brs02
+postval <- c("mean_post", "sd_post")
+print(subset(by_speaker, speaker == "brs02", select = postval))
+```
+
+### 4.2
+```{r}
+# байесовский интервал 95% для апостериорных наблюдений для tt01
+tt_mean_post <- subset(by_speaker, speaker == "tt01")$mean_post
+tt_sd_post <- subset(by_speaker, speaker == "tt01")$sd_post
+cred_int_l = qnorm(.025, tt_mean_post, tt_sd_post)
+cred_int_h = qnorm(.975, tt_mean_post, tt_sd_post)
+print(data.frame(int_l = cred_int_l, int_h = cred_int_h))
+```
