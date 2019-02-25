@@ -1,0 +1,58 @@
+---
+title: "hw5"
+author: "Anna Sorokina"
+editor_options: 
+  chunk_output_type: console
+---
+
+### 5.1
+```{r}
+library(tidyverse)
+library(ca)
+chairs <- read.csv("https://raw.githubusercontent.com/agricolamz/2019_data_analysis_for_linguists/master/data/students/ansorox/hw5_CA_MCA/hw5_chairs.csv")
+rm.cols <- c("Shop", "WordDE", "Category") # ненужные переменные
+chairs2 <- chairs[, ! names(chairs) %in% rm.cols, drop = F] # создаем датасет, в котором нет ненужных переменных
+
+MCA <- MASS::mca(chairs2) # строим МСА
+chairs <- cbind(chairs, MCA$rs)
+vars <- as_data_frame(MCA$cs)
+vars$var_names <- rownames(MCA$cs)
+
+chairs %>%
+  ggplot(aes(`1`, `2`))+
+  geom_point(aes(color = Category))+
+  stat_ellipse(aes(color = Category))+
+  geom_text(data = vars, aes(`1`, `2`, label = var_names))+
+  theme_light()+
+  scale_x_continuous()
+
+```
+### 5.2
+```{r}
+
+```
+### 5.3
+```{r}
+colreg <- read.csv("https://raw.githubusercontent.com/agricolamz/2019_data_analysis_for_linguists/master/data/students/ansorox/hw5_CA_MCA/hw5_colreg.csv")
+
+rownames(colreg) <- colreg$colors
+ca <- ca(colreg[, -5])
+
+colreg_c <- data.frame(ca$colcoord)
+colreg_c$rows <- rownames(ca$colcoord)
+
+colreg_r <- data.frame(ca$rowcoord)
+colreg_r$rows <- rownames(ca$rowcoord)
+
+colreg_c %>%
+  ggplot(aes(Dim1, Dim2, label = rows))+
+  geom_text(color = "darkgreen")+
+  geom_text(data = colreg_r, color = "darkgrey")+
+  theme_light()
+
+```
+### 5.4
+
+```{r}
+
+```
