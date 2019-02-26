@@ -24,11 +24,13 @@ chairs %>%
   stat_ellipse(aes(color = Category))+
   geom_text(data = vars, aes(`1`, `2`, label = var_names))+
   theme_light()+
-  scale_x_continuous()
+  scale_x_continuous(limits = c(-0.025, 0.02))
 
 ```
 ### 5.2
 ```{r}
+Sessel и Stuhl хорошо различаются по ряду признаков: наличию дополнительной функции (Sessel может иметь функцию кровати (AddFunctions.Bed), Stuhl скорее не имеет дополнительных функций (AddFunctions.No)), наличию подлокотников (Sessel - Arms.Yes, Stuhl - Arms.No), материалу (Sessel - MaterialSeat.Leather, MaterialSeat.Fabric; Shuhl - MaterialSeat.Steel, MaterialSeat.Plastic, MaterialSeat.Paper), возможности откидывать спинку (Sessel - ReclineBack.Yes, Stuhl - ReclineBack.No), назначению (Sessel - Function.Relax; Stuhl - Function.Eat, Function.Outdoor, Function.NotSpec).
+Тем не менее, категории Sessel и Stuhl пересекаются по ряду признаков. 
 
 ```
 ### 5.3
@@ -54,5 +56,7 @@ colreg_c %>%
 ### 5.4
 
 ```{r}
+Для художественных текстов и прессы характерно использование большого количества обозначений цветов. Цвета наиболее часто встречающиеся в художественных текстах - желтый, голубой, розовый, фиолетовый, коричневый. В прессе - зеленый, оранжевый, красный. В устных текстах - черный. Белый примерно одинаково часто встречается в устных, художественных и академических текстах. 
+В текстах академического подкорпуса почти не встречается обозначений цветов. 
 
 ```
